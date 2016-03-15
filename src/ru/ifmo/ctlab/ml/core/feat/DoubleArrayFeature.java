@@ -1,6 +1,4 @@
-package ru.ifmo.ctlab.ml.core;
-
-import ru.ifmo.ctlab.ml.core.feat.AbstractNumericFeature;
+package ru.ifmo.ctlab.ml.core.feat;
 
 public class DoubleArrayFeature extends AbstractNumericFeature<double[]> {
 
@@ -13,11 +11,6 @@ public class DoubleArrayFeature extends AbstractNumericFeature<double[]> {
 	@Override
 	public double getNumericValue(double[] x) {
 		return x[index];
-	}
-
-	@Override
-	public String getFeatureName() {
-		return "DoubleArrayFeature(" + index + ")";
 	}
 
 }

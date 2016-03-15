@@ -7,7 +7,7 @@ public interface Feature<K, V> {
 
 	public boolean equals(K x, K y);
 
-	public String getFeatureName();
+	// public String getFeatureName();
 
 	public V getFeatureValue(K x);
 
