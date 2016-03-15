@@ -1,8 +1,8 @@
 package ru.ifmo.ctlab.ml.core;
 
-import ru.ifmo.ctlab.ml.core.feat.StrictRealFeature;
+import ru.ifmo.ctlab.ml.core.feat.AbstractNumericFeature;
 
-public class DoubleArrayFeature extends StrictRealFeature<double[]> {
+public class DoubleArrayFeature extends AbstractNumericFeature<double[]> {
 
 	public final int index;
 
@@ -11,13 +11,13 @@ public class DoubleArrayFeature extends StrictRealFeature<double[]> {
 	}
 
 	@Override
-	public String getName() {
-		return "DoubleArrayFeature(" + index + ")";
+	public double getNumericValue(double[] x) {
+		return x[index];
 	}
 
 	@Override
-	public double getValue(double[] x) {
-		return x[index];
+	public String getFeatureName() {
+		return "DoubleArrayFeature(" + index + ")";
 	}
 
 }

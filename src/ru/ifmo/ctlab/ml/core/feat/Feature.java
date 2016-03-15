@@ -1,13 +1,17 @@
 package ru.ifmo.ctlab.ml.core.feat;
 
-public interface Feature<T> {
-	public String getName();
+public interface Feature<K, V> {
+	public int compare(K x, K y);
 
-	public boolean equals(T x, T y);
+	public double distance(K x, K y);
 
-	public double distance(T x, T y);
+	public boolean equals(K x, K y);
 
-	public int compare(T x, T y);
+	public String getFeatureName();
 
-	public boolean isMissing(T x);
+	public V getFeatureValue(K x);
+
+	public double getNumericValue(K x);
+
+	public boolean isMissing(K x);
 }
