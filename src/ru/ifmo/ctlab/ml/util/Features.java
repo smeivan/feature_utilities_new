@@ -6,13 +6,15 @@ import java.util.List;
 import ru.ifmo.ctlab.ml.core.feat.AbstractNumericFeature;
 import ru.ifmo.ctlab.ml.core.feat.EnumFeature;
 import ru.ifmo.ctlab.ml.core.feat.Feature;
+import ru.ifmo.ctlab.ml.core.feat.NumericFeture;
+import weka.core.Instance;
 
 public class Features {
 
-	public static <T> List<Feature<T, ?>> getDistribution(EnumFeature<T> feature) {
+	public static <T> List<NumericFeture<T>> getDistribution(final EnumFeature<T> feature) {
 
 		int d = feature.dimension();
-		List<Feature<T, ?>> features = new ArrayList<Feature<T, ?>>();
+		List<NumericFeture<T>> features = new ArrayList<NumericFeture<T>>();
 
 		for (int i = 0; i < d; i++) {
 			final int index = i;
@@ -32,6 +34,7 @@ public class Features {
 
 					return 0.0;
 				}
+
 			});
 		}
 

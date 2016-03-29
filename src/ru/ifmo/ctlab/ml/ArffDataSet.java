@@ -7,6 +7,7 @@ import ru.ifmo.ctlab.ml.core.feat.AbstractEnumFeature;
 import ru.ifmo.ctlab.ml.core.feat.AbstractNumericFeature;
 import ru.ifmo.ctlab.ml.core.feat.EnumFeature;
 import ru.ifmo.ctlab.ml.core.feat.Feature;
+import ru.ifmo.ctlab.ml.core.feat.NumericFeture;
 import ru.ifmo.ctlab.ml.util.Pair;
 import weka.core.Attribute;
 import weka.core.Instance;
@@ -14,13 +15,13 @@ import weka.core.Instances;
 import weka.experiment.Stats;
 
 public class ArffDataSet {
-	public static Pair<List<Feature<Instance, ?>>, EnumFeature<Instance>> getFeatureSpace(Instances instances) {
-		List<Feature<Instance, ?>> features = new ArrayList<Feature<Instance, ?>>();
+	public static Pair<List<NumericFeture<Instance>>, EnumFeature<Instance>> getFeatureSpace(Instances instances) {
+		List<NumericFeture<Instance>> features = new ArrayList<NumericFeture<Instance>>();
 		EnumFeature<Instance> classFeature = null;
 
 		int a = instances.numAttributes();
 		int c = instances.classIndex();
-		int d = instances.numClasses();
+		final int d = instances.numClasses();
 
 		for (int i = 0; i < a; i++) {
 			final Attribute attribute = instances.attribute(i);
@@ -70,6 +71,6 @@ public class ArffDataSet {
 
 		}
 
-		return new Pair<List<Feature<Instance, ?>>, EnumFeature<Instance>>(features, classFeature);
+		return new Pair<List<NumericFeture<Instance>>, EnumFeature<Instance>>(features, classFeature);
 	}
 }

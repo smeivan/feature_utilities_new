@@ -1,3 +1,4 @@
+package example;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -6,9 +7,10 @@ import java.util.List;
 
 import ru.ifmo.ctlab.ml.ArffDataSet;
 import ru.ifmo.ctlab.ml.LinearRegression;
-import ru.ifmo.ctlab.ml.core.feat.ConstFeature;
+import ru.ifmo.ctlab.ml.core.feat.ConstNumericFeature;
 import ru.ifmo.ctlab.ml.core.feat.EnumFeature;
 import ru.ifmo.ctlab.ml.core.feat.Feature;
+import ru.ifmo.ctlab.ml.core.feat.NumericFeture;
 import ru.ifmo.ctlab.ml.core.feat.PCA;
 import ru.ifmo.ctlab.ml.util.Features;
 import ru.ifmo.ctlab.ml.util.Pair;
@@ -31,7 +33,7 @@ public class TestThisTrash {
 
 	public static void main(String[] args) throws FileNotFoundException {
 
-		File dataFolder = new File("data");
+		File dataFolder = new File("data" + File.separator + "arff");
 
 		int iter = 1000;
 
@@ -57,13 +59,13 @@ public class TestThisTrash {
 					{
 						long start = System.nanoTime();
 						try {
-							Pair<List<Feature<Instance, ?>>, EnumFeature<Instance>> p = ArffDataSet.getFeatureSpace(instances);
-							List<Feature<Instance, ?>> f = p.x;
+							Pair<List<NumericFeture<Instance>>, EnumFeature<Instance>> p = ArffDataSet.getFeatureSpace(instances);
+							List<NumericFeture<Instance>> f = p.x;
 
 							// FIXME push this in classifier?
-							f.add(new ConstFeature<Instance>(1.0));
+							f.add(new ConstNumericFeature<Instance>(1.0));
 
-							List<Feature<Instance, ?>> t = Features.getDistribution(p.y);
+							List<NumericFeture<Instance>> t = Features.getDistribution(p.y);
 							LinearRegression<Instance> c = new LinearRegression<Instance>(instances, f, t);
 
 							for (Instance instance : instances) {
@@ -87,15 +89,15 @@ public class TestThisTrash {
 					{
 						long start = System.nanoTime();
 						try {
-							Pair<List<Feature<Instance, ?>>, EnumFeature<Instance>> p = ArffDataSet.getFeatureSpace(instances);
-							List<Feature<Instance, ?>> f = p.x;
+							Pair<List<NumericFeture<Instance>>, EnumFeature<Instance>> p = ArffDataSet.getFeatureSpace(instances);
+							List<NumericFeture<Instance>> f = p.x;
 
 							f = PCA.pca(instances, f, Math.min((f.size() + 1) / 2, 5));
 
 							// FIXME push this in classifier?
-							f.add(new ConstFeature<Instance>(1.0));
+							f.add(new ConstNumericFeature<Instance>(1.0));
 
-							List<Feature<Instance, ?>> t = Features.getDistribution(p.y);
+							List<NumericFeture<Instance>> t = Features.getDistribution(p.y);
 							LinearRegression<Instance> c = new LinearRegression<Instance>(instances, f, t);
 
 							for (Instance instance : instances) {

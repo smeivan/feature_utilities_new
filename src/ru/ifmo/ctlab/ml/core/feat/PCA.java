@@ -10,17 +10,9 @@ import Jama.Matrix;
 
 public class PCA {
 
-	static double clear(double val) {
-		if (Double.isFinite(val)) {
-			return val;
-		} else {
-			return 0;
-		}
-	}
+	public static <T> List<NumericFeture<T>> pca(List<T> dataset, final List<NumericFeture<T>> sourse, int m) {
 
-	public static <T> List<Feature<T, ?>> pca(List<T> dataset, List<Feature<T, ?>> sourse, int m) {
-
-		int n = sourse.size();
+		final int n = sourse.size();
 
 		if (m >= n) {
 			// FIXME Add exception?
@@ -36,12 +28,12 @@ public class PCA {
 			for (int i = 0; i < n; i++) {
 				sum2[i] = new double[i + 1];
 
-				double x = clear(sourse.get(i).getNumericValue(instance));
+				double x = sourse.get(i).getNumericValue(instance);
 				sum1[i] += x;
 				sum2[i][i] += x * x;
 
 				for (int j = 0; j <= i; j++) {
-					double xy = x * clear(sourse.get(j).getNumericValue(instance));
+					double xy = x * sourse.get(j).getNumericValue(instance);
 					sum2[i][j] += xy;
 				}
 			}
@@ -53,16 +45,16 @@ public class PCA {
 				double c = k * sum2[i][j] - sum1[i] * sum1[j];
 				double x = Math.sqrt(k * sum2[i][i] - sum1[i] * sum1[i]);
 				double y = Math.sqrt(k * sum2[j][j] - sum1[j] * sum1[j]);
-				cor[i][j] = cor[j][i] = clear(c / (x * y));
+				cor[i][j] = cor[j][i] = c / (x * y);
 			}
 		}
 
 		Matrix matrix = new Matrix(cor, n, n);
 		EigenvalueDecomposition e = matrix.eig();
 
-		double[] real = e.getRealEigenvalues();
-		double[] imag = e.getImagEigenvalues();
-		double[] norm = new double[n];
+		final double[] real = e.getRealEigenvalues();
+		final double[] imag = e.getImagEigenvalues();
+		final double[] norm = new double[n];
 		for (int i = 0; i < n; i++) {
 			norm[i] = real[i] * real[i] + imag[i] * imag[i];
 		}
@@ -80,20 +72,21 @@ public class PCA {
 			}
 		});
 
-		double[][] ev = e.getV().getArray();
+		final double[][] ev = e.getV().getArray();
 
-		List<Feature<T, ?>> dest = new ArrayList<>();
+		List<NumericFeture<T>> dest = new ArrayList<>();
 		for (int f = 0; f < m; f++) {
 			final int index = order[f];
 
 			dest.add(new AbstractNumericFeature<T>() {
+
 				@Override
 				public double getNumericValue(T instance) {
 					double val = 0;
 
 					for (int i = 0; i < n; i++) {
 						// FIXME ev[i][index] or ev[index][i] ???
-						val += ev[i][index] * clear(sourse.get(i).getNumericValue(instance));
+						val += ev[i][index] * sourse.get(i).getNumericValue(instance);
 					}
 
 					return val;

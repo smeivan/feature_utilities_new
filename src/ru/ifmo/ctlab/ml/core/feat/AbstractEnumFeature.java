@@ -1,6 +1,7 @@
 package ru.ifmo.ctlab.ml.core.feat;
 
 public abstract class AbstractEnumFeature<T> implements EnumFeature<T> {
+	public static final int MISSING_VALUE = Integer.MIN_VALUE;
 
 	@Override
 	public int compare(T x, T y) {
@@ -16,12 +17,12 @@ public abstract class AbstractEnumFeature<T> implements EnumFeature<T> {
 	@Override
 	public double distance(T x, T y) {
 		int xValue = getOrdinal(x);
-		if (xValue < 0) {
+		if (isMissing(xValue)) {
 			return Double.NaN;
 		}
 
 		int yValue = getOrdinal(y);
-		if (yValue < 0) {
+		if (isMissing(yValue)) {
 			return Double.NaN;
 		}
 
@@ -31,31 +32,45 @@ public abstract class AbstractEnumFeature<T> implements EnumFeature<T> {
 	@Override
 	public boolean equals(T x, T y) {
 		int xValue = getOrdinal(x);
-		if (xValue < 0) {
+		if (isMissing(xValue)) {
 			return false;
 		}
 
 		int yValue = getOrdinal(y);
-		if (yValue < 0) {
+		if (isMissing(yValue)) {
 			return false;
 		}
 
 		return xValue == yValue;
 	}
 
-	@Override
-	public double getNumericValue(T x) {
-		return (double) getOrdinal(x) / dimension();
+	public boolean isMissing(int ordinal) {
+		return ordinal < 0;
 	}
 
 	@Override
-	public Integer getFeatureValue(T x) {
+	public int getIntegerValue(T x) {
 		return getOrdinal(x);
 	}
 
 	@Override
-	public boolean isMissing(T x) {
-		return getOrdinal(x) < 0;
+	public double getNumericValue(T x) {
+		int value = getOrdinal(x);
+		if (isMissing(value)) {
+			return 0;
+		} else {
+			return (value + 1.) / dimension();
+		}
+	}
+
+	@Override
+	public double getFloatValue(T x) {
+		int value = getOrdinal(x);
+		if (isMissing(value)) {
+			return Double.NaN;
+		} else {
+			return value;
+		}
 	}
 
 }

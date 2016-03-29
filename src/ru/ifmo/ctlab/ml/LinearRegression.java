@@ -4,55 +4,45 @@ import java.util.List;
 
 import Jama.Matrix;
 import ru.ifmo.ctlab.ml.core.feat.Feature;
+import ru.ifmo.ctlab.ml.core.feat.NumericFeture;
 
 public class LinearRegression<T> {
 
-	final double[][] w;
+	final double[][] alpha;
 	final int n, m;
 
-	final List<Feature<T, ?>> f;
-
-	double clear(double val) {
-		if (Double.isFinite(val)) {
-			return val;
-		} else {
-			return 0;
-		}
+	public double[] getCoef(int tid) {
+		return alpha[tid].clone();
 	}
 
-	public LinearRegression(List<T> dataset, List<Feature<T, ?>> features, List<Feature<T, ?>> target) {
+	final List<NumericFeture<T>> f;
+
+	public LinearRegression(List<T> dataset, List<NumericFeture<T>> features, List<NumericFeture<T>> target) {
 		f = features;
 		n = target.size();
 		m = features.size();
-		w = new double[n][m];
 
-		for (int tid = 0; tid < n; tid++) {
-			double[][] a = new double[m][m];
-			double[] b = new double[m];
+		double[][] a = new double[m][m];
+		double[][] b = new double[n][m];
 
-			for (T instance : dataset) {
-				for (int i = 0; i < m; i++) {
-					double val = clear(f.get(i).getNumericValue(instance));
-					for (int j = 0; j < i; j++) {
-						double mul = val * clear(f.get(j).getNumericValue(instance));
-						a[i][j] += mul;
-						a[j][i] += mul;
-					}
-
-					a[i][i] += val * val;
-
-					b[i] += val * clear(target.get(tid).getNumericValue(instance));
-				}
-			}
-
-			double[][] c = new Matrix(a, m, m).inverse().getArray();
-
+		for (T instance : dataset) {
 			for (int i = 0; i < m; i++) {
-				for (int j = 0; j < m; j++) {
-					w[tid][i] += c[j][i] * b[i];
+				double val = f.get(i).getNumericValue(instance);
+				for (int j = 0; j < i; j++) {
+					double mul = val * f.get(j).getNumericValue(instance);
+					a[i][j] += mul;
+					a[j][i] += mul;
+				}
+
+				a[i][i] += val * val;
+
+				for (int tid = 0; tid < n; tid++) {
+					b[tid][i] += val * target.get(tid).getNumericValue(instance);
 				}
 			}
 		}
+
+		alpha = (new Matrix(b)).times((new Matrix(a, m, m)).inverse()).getArray();
 	}
 
 	public double[] solve(T instance) {
@@ -60,7 +50,7 @@ public class LinearRegression<T> {
 
 		for (int tid = 0; tid < n; tid++) {
 			for (int i = 0; i < m; i++) {
-				res[tid] += w[tid][i] * clear(f.get(i).getNumericValue(instance));
+				res[tid] += alpha[tid][i] * f.get(i).getNumericValue(instance);
 			}
 		}
 

@@ -1,10 +1,10 @@
 package ru.ifmo.ctlab.ml.core.feat;
 
-public class ConstFeature<T> extends AbstractNumericFeature<T> {
+public class ConstNumericFeature<T> extends AbstractNumericFeature<T> {
 
 	final public double value;
 
-	public ConstFeature(double d) {
+	public ConstNumericFeature(double d) {
 		value = d;
 	}
 
@@ -12,4 +12,5 @@ public class ConstFeature<T> extends AbstractNumericFeature<T> {
 	public double getNumericValue(T x) {
 		return value;
 	}
+
 }
