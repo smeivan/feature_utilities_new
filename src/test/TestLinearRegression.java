@@ -26,13 +26,13 @@ public class TestLinearRegression {
 		int numInst = 100;
 
 		int numS = 10; // Number of source features.
-		int numT = 5;// Number of target features.
+		int numT = 5; // Number of target features.
 
 		int instLen = numS + numT;
 
 		double[][] alpha = new double[numT][numS];
 
-		double snr = 5; // Signal to noise ratio.
+		double noise = 1; // Noise factor.
 
 		for (int i = 0; i < numT; i++) {
 			for (int j = 0; j < numS; j++) {
@@ -53,7 +53,7 @@ public class TestLinearRegression {
 			for (int i = 0; i < numT; i++, index++) {
 
 				// Add some noise in data
-				inst[index] = random.nextGaussian() / snr;
+				inst[index] = random.nextGaussian() * noise;
 
 				for (int j = 0; j < numS; j++) {
 					inst[index] += alpha[i][j] * inst[j];

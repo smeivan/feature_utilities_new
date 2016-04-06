@@ -42,7 +42,7 @@ public class LinearRegression<T> {
 			}
 		}
 
-		alpha = (new Matrix(b)).times((new Matrix(a, m, m)).inverse()).getArray();
+		alpha = (new Matrix(b, n, m)).times((new Matrix(a, m, m)).inverse()).getArray();
 	}
 
 	public double[] solve(T instance) {

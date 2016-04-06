@@ -14,7 +14,7 @@ public class PCA {
 
 		final int n = sourse.size();
 
-		if (m >= n) {
+		if (m > n) {
 			// FIXME Add exception?
 			return sourse;
 		}
@@ -32,20 +32,33 @@ public class PCA {
 				sum1[i] += x;
 				sum2[i][i] += x * x;
 
-				for (int j = 0; j <= i; j++) {
+				for (int j = 0; j < i; j++) {
 					double xy = x * sourse.get(j).getNumericValue(instance);
 					sum2[i][j] += xy;
 				}
 			}
 		}
 
+		final double[] std = new double[n];
+		final double[] mean = new double[n];
+
+		for (int i = 0; i < n; i++) {
+			mean[i] = sum1[i] / k;
+			double var = (sum1[i] * sum1[i] / k - sum2[i][i]) / (k - 1);
+			std[i] = Math.sqrt(var);
+		}
+
 		double[][] cor = new double[n][n];
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j <= i; j++) {
-				double c = k * sum2[i][j] - sum1[i] * sum1[j];
-				double x = Math.sqrt(k * sum2[i][i] - sum1[i] * sum1[i]);
-				double y = Math.sqrt(k * sum2[j][j] - sum1[j] * sum1[j]);
-				cor[i][j] = cor[j][i] = c / (x * y);
+				double cov = sum2[i][j] / k - mean[i] * mean[j];
+				double sigma = std[i] * std[j];
+				cor[i][j] = cor[j][i] = cov / sigma;
+
+				if (Double.isNaN(cor[i][j])) {
+					System.out.println(i + " " + j);
+				}
+
 			}
 		}
 
@@ -82,14 +95,17 @@ public class PCA {
 
 				@Override
 				public double getNumericValue(T instance) {
-					double val = 0;
+					double scalar = 0;
 
 					for (int i = 0; i < n; i++) {
+
+						double val = (sourse.get(i).getNumericValue(instance) - mean[i]) / std[i];
+
 						// FIXME ev[i][index] or ev[index][i] ???
-						val += ev[i][index] * sourse.get(i).getNumericValue(instance);
+						scalar += ev[index][i] * val;
 					}
 
-					return val;
+					return scalar;
 				}
 
 			});
