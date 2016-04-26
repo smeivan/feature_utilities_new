@@ -1,8 +1,11 @@
 package ru.ifmo.ctlab.ml.core.feat;
 
-public interface EnumFeature<T> extends IntegerFeature<T> {
-	public int dimension();
+import ru.ifmo.ctlab.ml.core.val.Instance;
 
-	public int getOrdinal(T x);
+public interface EnumFeature extends IntegerFeature {
+
+    int dimension();
+
+    int getOrdinal(Instance instance);
 
 }

@@ -1,7 +1,9 @@
 package ru.ifmo.ctlab.ml.core.feat;
 
-public interface IntegerFeature<T> extends NumericFeture<T> {
+import ru.ifmo.ctlab.ml.core.val.Instance;
 
-	public int getIntegerValue(T x);
+public interface IntegerFeature extends NumericFeature {
+
+    int intFeature(Instance instance);
 
 }

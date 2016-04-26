@@ -1,16 +1,38 @@
 package ru.ifmo.ctlab.ml.core.feat;
 
-public class ConstNumericFeature<T> extends AbstractNumericFeature<T> {
+import ru.ifmo.ctlab.ml.core.val.Instance;
 
-	final public double value;
+public class ConstNumericFeature implements NumericFeature {
 
-	public ConstNumericFeature(double d) {
-		value = d;
-	}
+    final public double value;
 
-	@Override
-	public double getNumericValue(T x) {
-		return value;
-	}
+    public ConstNumericFeature(double value) {
+        this.value = value;
+    }
+
+    @Override
+    public int compare(Instance x, Instance y) {
+        return 0;
+    }
+
+    @Override
+    public double distance(Instance x, Instance y) {
+        return 0;
+    }
+
+    @Override
+    public String name() {
+        return "const" + Double.toString(value);
+    }
+
+    @Override
+    public double numFeature(Instance instance) {
+        return value;
+    }
+
+    @Override
+    public String toString() {
+        return Double.toString(value);
+    }
 
 }

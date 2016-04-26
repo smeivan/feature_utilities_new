@@ -1,26 +1,22 @@
 package ru.ifmo.ctlab.ml.core.feat;
 
-public abstract class AbstractNumericFeature<T> implements NumericFeture<T> {
-	public static final double EPS = 1e-9;
+import ru.ifmo.ctlab.ml.core.val.Instance;
 
-	@Override
-	public int compare(T x, T y) {
-		return Double.compare(getFloatValue(x), getFloatValue(y));
-	}
+public abstract class AbstractNumericFeature implements NumericFeature {
+    public static final double MISSING_VALUE = Double.NaN;
 
-	@Override
-	public double distance(T x, T y) {
-		return Math.abs(getFloatValue(x) - getFloatValue(y));
-	}
+    @Override
+    public int compare(Instance x, Instance y) {
+        return Double.compare(numFeature(x), numFeature(y));
+    }
 
-	@Override
-	public boolean equals(T x, T y) {
-		return Math.abs(getFloatValue(x) - getFloatValue(y)) < EPS;
-	}
+    @Override
+    public double distance(Instance x, Instance y) {
+        return Math.abs(numFeature(x) - numFeature(y));
+    }
 
-	@Override
-	public double getFloatValue(T x) {
-		return getNumericValue(x);
-	}
-
+    @Override
+    public String toString() {
+        return name();
+    }
 }

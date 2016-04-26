@@ -1,11 +1,13 @@
 package ru.ifmo.ctlab.ml.core.feat;
 
-public interface Feature<T> {
-	public int compare(T x, T y);
+import ru.ifmo.ctlab.ml.core.val.Instance;
 
-	public double distance(T x, T y);
+public interface Feature {
 
-	public boolean equals(T x, T y);
+    int compare(Instance x, Instance y);
 
-	public double getFloatValue(T x);
+    double distance(Instance x, Instance y);
+
+    String name();
+
 }
